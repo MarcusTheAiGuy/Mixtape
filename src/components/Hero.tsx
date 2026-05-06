@@ -26,7 +26,7 @@ export function Hero() {
       >
         You&apos;ve been to a gig at Usher Hall, a screening at The Cameo or The Filmhouse —
         surrounded by people who love the same art you do. Then you all leave and never
-        see each other again. Edinburgh Mixtape fixes that. Tell us what you love and
+        see each other again. Edinburgh Foyer fixes that. Tell us what you love and
         we&apos;ll match you with your people at a pub night.
       </motion.p>
 

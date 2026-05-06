@@ -1,7 +1,7 @@
 import { MeProfileEditor } from "@/components/MeProfileEditor";
 
 export const metadata = {
-  title: "Your profile — Mixtape",
+  title: "Your profile — Edinburgh Foyer",
 };
 
 export default function MePage() {

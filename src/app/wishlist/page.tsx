@@ -1,7 +1,7 @@
 import { WishlistEditor } from "@/components/WishlistEditor";
 
 export const metadata = {
-  title: "Wishlist — Mixtape",
+  title: "Wishlist — Edinburgh Foyer",
 };
 
 export default function WishlistPage() {

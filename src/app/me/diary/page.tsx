@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MoodTimeline } from "@/components/MoodTimeline";
 
 export const metadata = {
-  title: "Mood diary — Mixtape",
+  title: "Mood diary — Edinburgh Foyer",
 };
 
 export default function DiaryPage() {
