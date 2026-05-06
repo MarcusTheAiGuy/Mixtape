@@ -10,6 +10,8 @@ export const metadata = {
   title: "Profile — Edinburgh Foyer",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage({
   params,
 }: {

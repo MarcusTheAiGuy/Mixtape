@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { auth, signOut } from "@/auth";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
@@ -8,7 +9,10 @@ const navLinks = [
   { href: "/meetups", label: "Meetups" },
 ];
 
-export function Navbar() {
+export async function Navbar() {
+  const session = await auth();
+  const user = session?.user;
+
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-[color:var(--color-background)]/70 border-b border-[color:var(--color-border)]">
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -31,14 +35,48 @@ export function Navbar() {
           <li className="ml-1">
             <ThemeToggle />
           </li>
-          <li>
-            <Link
-              href="/signin"
-              className="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-white/15 transition-colors"
-            >
-              Sign in
-            </Link>
-          </li>
+          {user ? (
+            <>
+              <li className="ml-2 flex items-center gap-2 px-2 py-1 rounded-md bg-white/5">
+                {user.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={user.image}
+                    alt=""
+                    className="w-7 h-7 rounded-full"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <span className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-indigo-400" />
+                )}
+                <span className="text-sm hidden sm:inline">{user.name?.split(" ")[0] ?? "You"}</span>
+              </li>
+              <li>
+                <form
+                  action={async () => {
+                    "use server";
+                    await signOut({ redirectTo: "/" });
+                  }}
+                >
+                  <button
+                    type="submit"
+                    className="ml-1 px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-white/15 transition-colors"
+                  >
+                    Sign out
+                  </button>
+                </form>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link
+                href="/signin"
+                className="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-white/15 transition-colors"
+              >
+                Sign in
+              </Link>
+            </li>
+          )}
         </ul>
       </nav>
     </header>
