@@ -33,7 +33,7 @@
   }
 
   h1, h2, h3 {
-    font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+    font-family: "Clash Display", var(--font-sans), ui-sans-serif, sans-serif;
   }
 
   body {
