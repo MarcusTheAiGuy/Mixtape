@@ -13,7 +13,7 @@ export function Hero() {
         className="text-5xl md:text-7xl tracking-tight font-normal leading-[1.08] max-w-3xl"
       >
         Love the show.{" "}
-        <span className="bg-gradient-to-r from-[#6b9e6e] via-[#a8c97a] to-[#c4703a] bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-[#e8855a] via-[#f0b080] to-[#5aaa99] bg-clip-text text-transparent">
           Meet the people.
         </span>
       </motion.h1>
