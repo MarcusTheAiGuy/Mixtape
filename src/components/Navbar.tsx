@@ -1,16 +1,18 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
-  { href: "/mixtapes", label: "Mixtapes" },
+  { href: "/me", label: "Your taste" },
+  { href: "/wishlist", label: "Wishlist" },
   { href: "/meetups", label: "Meetups" },
 ];
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-[color:var(--color-background)]/60 border-b border-[color:var(--color-border)]">
+    <header className="sticky top-0 z-40 backdrop-blur-md bg-[color:var(--color-background)]/70 border-b border-[color:var(--color-border)]">
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <span className="inline-block w-7 h-7 rounded-md bg-gradient-to-br from-pink-400 to-indigo-400 shadow-[0_0_24px_rgba(244,114,182,0.5)] group-hover:scale-105 transition-transform" />
+          <span className="inline-block w-7 h-7 rounded-md bg-gradient-to-br from-pink-400 to-indigo-400 shadow-[0_0_24px_color-mix(in_oklab,var(--color-accent)_50%,transparent)] group-hover:scale-105 transition-transform" />
           <span className="text-lg tracking-tight font-semibold">Mixtape</span>
         </Link>
 
@@ -25,6 +27,9 @@ export function Navbar() {
               </Link>
             </li>
           ))}
+          <li className="ml-1">
+            <ThemeToggle />
+          </li>
           <li>
             <Link
               href="/signin"

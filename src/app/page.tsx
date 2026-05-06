@@ -3,22 +3,22 @@ import { Hero } from "@/components/Hero";
 
 const features = [
   {
-    title: "Make a mixtape",
-    body: "Curate a playlist, write the liner notes, share it with the people who'll get it.",
-    href: "/mixtapes",
-    cta: "Browse mixtapes",
+    title: "Your top 5s",
+    body: "Albums, artists, genres, songs, gigs. Anything goes — half-filled is fine. The more we know, the better the matches.",
+    href: "/me",
+    cta: "Start your profile",
   },
   {
-    title: "Find a meetup",
-    body: "Listening parties, record swaps, gigs at the back of a bar. Show up. Hear something new.",
+    title: "Wishlist next",
+    body: "Save the shows you want to make it to. Other people see your wishlist and can ask to tag along.",
+    href: "/wishlist",
+    cta: "Add a show",
+  },
+  {
+    title: "Meet up",
+    body: "Listening parties, record swaps, gigs. Each meetup is tagged with the taste it's for, so you only see what fits.",
     href: "/meetups",
     cta: "See what's on",
-  },
-  {
-    title: "Bring your friends",
-    body: "Mixtape is better with the right people. Invite a friend, build a scene.",
-    href: "/signin",
-    cta: "Get started",
   },
 ];
 
@@ -38,8 +38,9 @@ export default function HomePage() {
             <p className="relative text-[color:var(--color-muted)] leading-relaxed mb-6">
               {f.body}
             </p>
-            <span className="relative inline-flex items-center text-sm text-pink-300 group-hover:text-pink-200">
-              {f.cta} <span className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
+            <span className="relative inline-flex items-center text-sm text-pink-400 group-hover:text-pink-300">
+              {f.cta}
+              <span className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
             </span>
           </Link>
         ))}

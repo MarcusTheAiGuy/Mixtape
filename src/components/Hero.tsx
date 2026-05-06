@@ -12,11 +12,10 @@ export function Hero() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="text-5xl md:text-7xl tracking-tight font-semibold leading-[1.05] max-w-3xl"
       >
-        Share music.{" "}
+        Share your taste.{" "}
         <span className="bg-gradient-to-r from-pink-300 via-fuchsia-300 to-indigo-300 bg-clip-text text-transparent">
-          Meet up.
-        </span>{" "}
-        Repeat.
+          Find your people.
+        </span>
       </motion.h1>
 
       <motion.p
@@ -25,8 +24,9 @@ export function Hero() {
         transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
         className="mt-6 max-w-xl text-lg text-[color:var(--color-muted)] leading-relaxed"
       >
-        Mixtape is the place to swap playlists with friends, surface what you&apos;re into,
-        and gather around the music you love — online and in real life.
+        Drop your top 5 albums, artists, genres, songs, and the gigs you still
+        talk about. We&apos;ll match you with people who get it — and the meetups
+        worth showing up for.
       </motion.p>
 
       <motion.div
@@ -36,16 +36,16 @@ export function Hero() {
         className="mt-10 flex flex-wrap gap-3"
       >
         <Link
-          href="/signin"
-          className="px-5 py-3 rounded-full bg-white text-black font-medium hover:bg-white/90 transition-colors"
+          href="/me"
+          className="px-5 py-3 rounded-full bg-[color:var(--color-foreground)] text-[color:var(--color-background)] font-medium hover:opacity-90 transition-opacity"
         >
-          Get started
+          Build your top 5s
         </Link>
         <Link
-          href="/mixtapes"
-          className="px-5 py-3 rounded-full border border-white/15 hover:bg-white/5 transition-colors"
+          href="/meetups"
+          className="px-5 py-3 rounded-full border border-[color:var(--color-border)] hover:bg-white/5 transition-colors"
         >
-          Browse mixtapes
+          Browse meetups
         </Link>
       </motion.div>
     </section>

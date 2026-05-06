@@ -18,16 +18,20 @@ datasource db {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  username      String?   @unique
   email         String?   @unique
   emailVerified DateTime?
   image         String?
   bio           String?
+  location      String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   accounts  Account[]
   sessions  Session[]
-  mixtapes  Mixtape[]
+  taste     TasteEntry[]
+  moods     MoodEntry[]
+  wishlist  WishlistShow[]
   hosted    Meetup[]   @relation("MeetupHost")
   attending Attendee[]
 }
@@ -68,54 +72,95 @@ model VerificationToken {
 }
 
 // ────────────────────────────────────────────────────────────
-// Mixtape domain
+// Taste profile — identity ("all-time") + monthly mood
 // ────────────────────────────────────────────────────────────
 
-model Mixtape {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  coverUrl    String?
-  authorId    String
-  isPublic    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  author User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  tracks Track[]
-
-  @@index([authorId])
+enum TasteCategory {
+  ALBUM
+  ARTIST
+  GENRE
+  SONG
+  LIVE_SHOW
 }
 
-model Track {
-  id        String   @id @default(cuid())
-  mixtapeId String
-  title     String
+// Identity-layer top 5s — one per (user, category, position 1..5).
+// Position is 1..5. Fewer than 5 entries is allowed.
+model TasteEntry {
+  id         String        @id @default(cuid())
+  userId     String
+  category   TasteCategory
+  position   Int
+  name       String
+  subtitle   String?
+  imageUrl   String?
+  externalId String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, category, position])
+  @@index([userId])
+  @@index([category, name])
+}
+
+// Monthly mood — same shape as TasteEntry, scoped to a YYYY-MM key.
+model MoodEntry {
+  id         String        @id @default(cuid())
+  userId     String
+  monthKey   String
+  category   TasteCategory
+  position   Int
+  name       String
+  subtitle   String?
+  imageUrl   String?
+  externalId String?
+  createdAt  DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, monthKey, category, position])
+  @@index([userId, monthKey])
+}
+
+// Future shows the user wants to go to. Public so others can request to tag along.
+model WishlistShow {
+  id        String    @id @default(cuid())
+  userId    String
   artist    String
+  artistMbid String?
+  tourName  String?
+  venue     String?
+  city      String?
+  date      DateTime?
   url       String?
-  position  Int      @default(0)
-  createdAt DateTime @default(now())
+  notes     String?
+  createdAt DateTime  @default(now())
 
-  mixtape Mixtape @relation(fields: [mixtapeId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([mixtapeId])
+  @@index([userId])
+  @@index([date])
 }
 
 // ────────────────────────────────────────────────────────────
-// Meetup domain
+// Meetups
 // ────────────────────────────────────────────────────────────
 
 model Meetup {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  venue       String
-  city        String
-  startsAt    DateTime
-  endsAt      DateTime?
-  hostId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String     @id @default(cuid())
+  title        String
+  description  String?
+  venue        String
+  city         String
+  startsAt     DateTime
+  endsAt       DateTime?
+  hostId       String
+  // Free-form taste filters (e.g. "shoegaze", "Big Thief").
+  // Used to surface this meetup to people whose taste matches.
+  tasteFilters String[]   @default([])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   host      User       @relation("MeetupHost", fields: [hostId], references: [id], onDelete: Cascade)
   attendees Attendee[]
