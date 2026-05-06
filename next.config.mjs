@@ -1,9 +1,3 @@
-import type { NextConfig } from "next";
-
-// Security response headers applied to every route. CSP is intentionally
-// strict; we only need same-origin scripts plus an inline theme-init script
-// (we use 'unsafe-inline' for now since we don't have a per-request nonce
-// pipeline in the App Router yet — switch to nonces in a follow-up).
 const SECURITY_HEADERS = [
   {
     key: "Content-Security-Policy",
@@ -11,7 +5,6 @@ const SECURITY_HEADERS = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
       "style-src 'self' 'unsafe-inline'",
-      // Allow album art from MusicBrainz redirects + data: URIs for cropped avatars + Google profile images
       "img-src 'self' data: blob: https://coverartarchive.org https://*.archive.org https://lh3.googleusercontent.com https://avatars.githubusercontent.com",
       "font-src 'self' data:",
       "connect-src 'self' https://va.vercel-scripts.com https://musicbrainz.org",
@@ -30,7 +23,8 @@ const SECURITY_HEADERS = [
   },
 ];
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "i.scdn.co" },
