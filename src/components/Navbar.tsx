@@ -3,6 +3,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
   { href: "/me", label: "Your taste" },
+  { href: "/discover", label: "Discover" },
   { href: "/wishlist", label: "Wishlist" },
   { href: "/meetups", label: "Meetups" },
 ];

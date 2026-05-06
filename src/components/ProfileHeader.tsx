@@ -1,7 +1,7 @@
 "use client";
 
 import { AvatarPreview, AvatarUploader } from "@/components/AvatarUploader";
-import type { Profile } from "@/lib/profile";
+import { ACCENT_PRESETS, type Profile } from "@/lib/profile";
 
 type EditableProps = {
   mode: "edit";
@@ -113,6 +113,43 @@ function EditableHeader({
             <p className="text-xs text-[color:var(--color-muted)] mt-1">
               {240 - profile.bio.length} characters left
             </p>
+          </Field>
+          <Field label="Accent" wide>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => update("accentHex", null)}
+                aria-label="Default accent"
+                aria-pressed={!profile.accentHex}
+                className={`w-7 h-7 rounded-full border-2 transition-colors ${
+                  !profile.accentHex
+                    ? "border-[color:var(--color-foreground)]"
+                    : "border-transparent"
+                }`}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #f472b6 0%, #818cf8 100%)",
+                }}
+              />
+              {ACCENT_PRESETS.map((preset) => {
+                const active = profile.accentHex === preset.hex;
+                return (
+                  <button
+                    key={preset.hex}
+                    type="button"
+                    onClick={() => update("accentHex", preset.hex)}
+                    aria-label={preset.name}
+                    aria-pressed={active}
+                    className={`w-7 h-7 rounded-full border-2 transition-colors ${
+                      active
+                        ? "border-[color:var(--color-foreground)]"
+                        : "border-transparent"
+                    }`}
+                    style={{ background: preset.hex }}
+                  />
+                );
+              })}
+            </div>
           </Field>
         </div>
       </div>

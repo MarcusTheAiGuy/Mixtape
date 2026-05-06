@@ -7,6 +7,10 @@ import { TopFiveCategory } from "@/components/TopFiveCategory";
 import { TasteShowcase } from "@/components/TasteShowcase";
 import { TasteInsights } from "@/components/TasteInsights";
 import { ProfileHeader } from "@/components/ProfileHeader";
+import { ProfileTheme } from "@/components/ProfileTheme";
+import { MoodEditor } from "@/components/MoodEditor";
+import { OnboardingModal } from "@/components/OnboardingModal";
+import { ProgressNudge } from "@/components/EmptyNudge";
 import { STORAGE_KEYS, loadJSON, saveJSON } from "@/lib/local-store";
 import {
   DEFAULT_PROFILE,
@@ -88,12 +92,33 @@ export function MeProfileEditor() {
         ))}
       </div>
 
+      <ProgressNudge filled={entries.length} />
+
       <h2 className="text-2xl font-semibold tracking-tight mt-16 mb-2">Insights</h2>
       <p className="text-[color:var(--color-muted)] mb-6 max-w-xl">
         Patterns we see in your picks. The more you fill in, the more this
         layer wakes up.
       </p>
       <TasteInsights entries={entries} />
+
+      <div className="mt-16 rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/40 p-6 md:p-8">
+        <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight">This month&apos;s mood</h2>
+            <p className="text-[color:var(--color-muted)] mt-1 max-w-xl">
+              Lighter than your identity top 5s — just whatever&apos;s on
+              rotation right now.
+            </p>
+          </div>
+          <Link
+            href="/me/diary"
+            className="text-sm underline underline-offset-2 text-[color:var(--color-muted)] hover:text-[color:var(--color-foreground)]"
+          >
+            See diary →
+          </Link>
+        </div>
+        <MoodEditor />
+      </div>
 
       <h2 className="text-2xl font-semibold tracking-tight mt-16 mb-2">
         Public preview
@@ -113,13 +138,17 @@ export function MeProfileEditor() {
           </>
         )}
       </p>
-      <div className="rounded-3xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/40 p-6 md:p-10">
-        <ProfileHeader mode="read" profile={profile} />
-        <TasteShowcase
-          entries={entries}
-          emptyHint="Pick your first album above to start filling this in."
-        />
-      </div>
+      <ProfileTheme accentHex={profile.accentHex}>
+        <div className="rounded-3xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/40 p-6 md:p-10">
+          <ProfileHeader mode="read" profile={profile} />
+          <TasteShowcase
+            entries={entries}
+            emptyHint="Pick your first album above to start filling this in."
+          />
+        </div>
+      </ProfileTheme>
+
+      <OnboardingModal />
     </>
   );
 }
