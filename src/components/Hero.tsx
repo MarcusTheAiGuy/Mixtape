@@ -12,9 +12,9 @@ export function Hero() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="text-5xl md:text-7xl tracking-tight font-normal leading-[1.08] max-w-3xl"
       >
-        Share your taste.{" "}
+        Love the show.{" "}
         <span className="bg-gradient-to-r from-[#6b9e6e] via-[#a8c97a] to-[#c4703a] bg-clip-text text-transparent">
-          Find your people.
+          Meet the people.
         </span>
       </motion.h1>
 
@@ -24,9 +24,10 @@ export function Hero() {
         transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
         className="mt-6 max-w-xl text-lg text-[color:var(--color-muted)] leading-relaxed"
       >
-        Drop your top 5 albums, artists, genres, songs, and the gigs you still
-        talk about. We&apos;ll match you with people who get it — and the meetups
-        worth showing up for.
+        You&apos;ve been to a gig at Usher Hall, a screening at The Cameo or The Filmhouse —
+        surrounded by people who love the same art you do. Then you all leave and never
+        see each other again. Edinburgh Mixtape fixes that. Tell us what you love and
+        we&apos;ll match you with your people at a pub night.
       </motion.p>
 
       <motion.div
@@ -39,13 +40,13 @@ export function Hero() {
           href="/me"
           className="px-5 py-3 rounded-full bg-[color:var(--color-foreground)] text-[color:var(--color-background)] font-medium hover:opacity-90 transition-opacity"
         >
-          Build your top 5s
+          Tell us your taste
         </Link>
         <Link
           href="/meetups"
           className="px-5 py-3 rounded-full border border-[color:var(--color-border)] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
         >
-          Browse meetups
+          See upcoming events
         </Link>
       </motion.div>
     </section>

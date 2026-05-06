@@ -19,13 +19,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Mixtape — share your taste, find your people",
+  title: "Edinburgh Mixtape — meet the people who were there",
   description:
-    "Mixtape is where you swap top 5s, log the gigs you love, wishlist the ones you want, and meet people who get it.",
+    "You've been to the gig, the screening, the show — surrounded by people who love the same things. Edinburgh Mixtape matches you with them at a pub night.",
   metadataBase: new URL("https://mixtape.app"),
   openGraph: {
-    title: "Mixtape",
-    description: "Share your taste. Meet up. Repeat.",
+    title: "Edinburgh Mixtape",
+    description: "Love the show. Meet the people.",
     type: "website",
   },
 };
