@@ -3,22 +3,22 @@ import { Hero } from "@/components/Hero";
 
 const features = [
   {
-    title: "Your top 5s",
-    body: "Albums, artists, genres, songs, gigs. Anything goes — half-filled is fine. The more we know, the better the matches.",
+    title: "Share what you love",
+    body: "Music, film, art — tell us your favourites. A gig you still talk about, a film that wrecked you, an artist you can't stop recommending.",
     href: "/me",
-    cta: "Start your profile",
+    cta: "Build your profile",
   },
   {
-    title: "Wishlist next",
-    body: "Save the shows you want to make it to. Other people see your wishlist and can ask to tag along.",
-    href: "/wishlist",
-    cta: "Add a show",
+    title: "Get matched",
+    body: "We pair you with people in Edinburgh who love the same things. The more you share, the better the match.",
+    href: "/discover",
+    cta: "See your matches",
   },
   {
-    title: "Meet up",
-    body: "Listening parties, record swaps, gigs. Each meetup is tagged with the taste it's for, so you only see what fits.",
+    title: "Show up",
+    body: "Pub nights in Edinburgh where the people you're matched with are actually there. No awkward cold starts — you already have something in common.",
     href: "/meetups",
-    cta: "See what's on",
+    cta: "Find an event",
   },
 ];
 
