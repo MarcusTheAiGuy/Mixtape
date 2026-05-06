@@ -88,6 +88,21 @@ function vibeWordsFor(genre: string): string[] {
   return k ? GENRE_VIBES[k] : [];
 }
 
+/**
+ * Derive everything the `<TasteInsights>` panel shows from a flat list of
+ * taste entries. Pure function — completely deterministic, no IO.
+ *
+ * Returned fields:
+ * - `totalFilled` / `totalSlots` / `completion` — how full the profile is
+ * - `perCategory` — count of entries per category (for the per-row dots)
+ * - `topGenres` — genres ranked by position weight (5..1)
+ * - `vibe` — a short phrase pulled from the GENRE_VIBES keyword map; falls
+ *   back to listing the genres if no keywords match
+ * - `crossovers` — names that appear across multiple categories (e.g. an
+ *   artist in Top Artists who also has an album in Top Albums)
+ *
+ * Tweak the `GENRE_VIBES` map to add more vocab or change tone.
+ */
 export function computeInsights(entries: TasteEntry[]): Insights {
   const perCategory = Object.fromEntries(CATEGORY_KEYS.map((c) => [c, 0])) as Record<
     TasteCategory,

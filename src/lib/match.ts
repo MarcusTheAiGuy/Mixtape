@@ -89,6 +89,22 @@ function laneOverlap(a: Bag, b: Bag) {
   return { intersection, union, shared };
 }
 
+/**
+ * Compute a taste-overlap score between two users' top 5s.
+ *
+ * - **Algorithm**: weighted Jaccard. Each entry contributes a weight based on
+ *   its position (1 = 5, 5 = 1). For each lane (genres / artists / albums /
+ *   songs / live shows) we compute Σ min(weights) / Σ max(weights), then
+ *   weight the lanes (genres + artists matter most) and sum.
+ * - **Score**: returned as 0..1. Use {@link matchPercent} to render as 0..100.
+ * - **Empty**: returns zero if either side has no entries.
+ * - **Cross-credit**: an album/song's credited artist counts toward the
+ *   *artist* lane at half weight, so picking "Loveless by My Bloody Valentine"
+ *   helps you match someone whose top artist is My Bloody Valentine.
+ *
+ * Pure function, fully tested in `__tests__/match.test.ts`. Tweak weights
+ * with the test file open.
+ */
 export function computeMatch(a: TasteEntry[], b: TasteEntry[]): MatchResult {
   if (a.length === 0 || b.length === 0) return EMPTY_RESULT;
   const A = buildLanes(a);
@@ -116,9 +132,15 @@ export function computeMatch(a: TasteEntry[], b: TasteEntry[]): MatchResult {
   return { score, shared, totalShared };
 }
 
+/**
+ * Convert a 0..1 match score into a 0..100 integer for display.
+ *
+ * Pure Jaccard tops out around 0.4 even for very-similar profiles (a perfect
+ * top-5 list is short!), so we stretch the calibration: anything ≥ 0.4 reads
+ * as 100%. The empirical sweet spot — feels right when looking at the sample
+ * users.
+ */
 export function matchPercent(score: number): number {
-  // Pure Jaccard tops out around 0.4-0.5 even for similar profiles, so we
-  // stretch it for display. Anything above 0.4 is "very high".
   const stretched = Math.min(1, score / 0.4);
   return Math.round(stretched * 100);
 }

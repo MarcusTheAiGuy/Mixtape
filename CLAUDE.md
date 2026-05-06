@@ -34,38 +34,65 @@ src/
     layout.tsx            # root layout: nav, footer, theme init script, analytics
     page.tsx              # landing page
     globals.css           # Tailwind v4 + theme tokens (light/dark)
-    me/page.tsx           # full profile editor — avatar (cropped), bio, top 5s, insights, public preview
-    u/[username]/page.tsx # public read-only profile (header + insights + showcase)
+    me/page.tsx           # full profile editor — avatar (cropped), bio, top 5s, mood, insights, public preview
+    me/diary/page.tsx     # mood timeline (scrollable monthly snapshots)
+    u/[username]/page.tsx # public read-only profile (header + match-in-common + insights + showcase)
+    discover/page.tsx     # ranked list of users by taste-overlap match score
     wishlist/page.tsx     # user's wishlisted upcoming shows
-    meetups/page.tsx      # browse meetups
+    meetups/page.tsx      # browse meetups (with fit % + sort by best-fit)
     signin/page.tsx       # auth entry
+    _actions/             # server actions (signed-in writes — see docs/architecture.md)
+      profile.ts          # saveProfile()
+      taste.ts            # replaceTaste()
+      mood.ts             # replaceMonthMood()
+      wishlist.ts         # add/removeWishlistShow()
     api/
       auth/[...nextauth]/route.ts   # NextAuth handlers
       music/search/route.ts         # MusicBrainz proxy (album/artist/song)
+      me/whoami/route.ts            # tiny endpoint powering SyncStatus
   auth.ts                 # NextAuth config (Prisma adapter, providers)
   auth-handlers.ts        # GET/POST handlers re-exported
   components/
+    ui/                   # design-token primitives (Button, Card, Chip, Field, SectionLabel)
     Navbar.tsx, Footer.tsx, Hero.tsx
     ThemeToggle.tsx       # light/dark toggle + pre-hydration init script
     AvatarUploader.tsx    # file picker + circle-crop (react-image-crop) -> data URL
-    ProfileHeader.tsx     # editable + read-only header (avatar, name, bio, location)
+    ProfileHeader.tsx     # editable + read-only header (avatar, name, bio, location, accent)
+    ProfileTheme.tsx      # CSS-var override wrapper for accent-colored profile pages
     TasteTypeahead.tsx    # generic MB-backed search dropdown w/ thumbnails
     TopFiveCategory.tsx   # 5-slot input grid for one category
     TasteShowcase.tsx     # server-renderable visual layout of top 5s (grids, tier, list)
     TasteInsights.tsx     # completeness ring, vibe blurb, recurring-name crossovers
     MeProfileEditor.tsx   # client editor that composes everything for /me
+    MoodEditor.tsx        # this-month mood snapshot editor (embedded in /me)
+    MoodTimeline.tsx      # scrollable archive view used on /me/diary
+    DiscoverList.tsx      # ranked discover cards (client; reads viewer's localStorage taste)
+    MatchInCommon.tsx     # banner on /u/[username] showing shared lanes + match %
+    MeetupList.tsx        # meetup cards w/ fit badge + sort toggle
+    OnboardingModal.tsx   # 3-step intro on first /me visit
+    EmptyNudge.tsx        # adaptive progress copy as user fills slots
+    SyncStatus.tsx        # "saving locally" / "saving to your account" pill
     WishlistEditor.tsx    # form + list for /wishlist
   lib/
     prisma.ts             # singleton Prisma client
+    has-db.ts             # boolean — is DATABASE_URL set
+    data/users.ts         # server reads (Prisma when hasDb, sample-users otherwise)
     music-search.ts       # client + types for /api/music/search
     taste.ts              # TasteEntry types, category metadata
     wishlist.ts           # WishlistShow types
-    profile.ts            # Profile type + storage key
+    profile.ts            # Profile type, length limits, sanitizers, accent palette
+    mood.ts               # MoodSnapshot type, monthKey helpers
+    match.ts              # PURE — taste-overlap scoring (tested)
+    meetup-fit.ts         # PURE — meetup fit % from tasteFilters (tested)
+    insights.ts           # PURE — vibe / completeness / crossovers (tested)
+    sample-users.ts       # six fictional users for demo mode
     genres.ts             # curated genre list (used by GenreSelect)
-    insights.ts           # pure functions to derive insights from entries
-    local-store.ts        # localStorage shim — replace with server actions later
+    local-store.ts        # localStorage shim for demo mode
+    __tests__/            # Vitest unit tests for the pure libs
 prisma/
   schema.prisma           # User/Account/Session + TasteEntry/MoodEntry/WishlistShow/Meetup/Attendee
+docs/
+  architecture.md         # walking tour of data flow + dual persistence model
 ```
 
 ## Domain model (Prisma)

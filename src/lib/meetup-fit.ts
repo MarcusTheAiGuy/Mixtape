@@ -5,9 +5,19 @@ export type MeetupFit = {
   matched: string[]; // tasteFilters that hit
 };
 
-// How well a meetup's tasteFilters match the viewer's top 5s.
-// Each filter looks for substring overlap (case-insensitive) against entry
-// names and subtitles. Genre + artist hits count more than song/album hits.
+/**
+ * How well a meetup's `tasteFilters` line up with the viewer's top 5s.
+ *
+ * - Filters are matched case-insensitively as **substrings** against each
+ *   entry's `name` and `subtitle` (the credited artist for albums/songs).
+ * - Each entry has a weight from its category + position. Genre and artist
+ *   hits count more than album/song/live-show hits.
+ * - Result is the raw fraction `scored / possible` capped to 100% — so a
+ *   single perfect-fit hit on a one-filter meetup honestly reads as 100%,
+ *   while two-of-three filter hits at lower positions reads as ~40-60%.
+ *
+ * Pure. See `__tests__/meetup-fit.test.ts` for behaviour pinned by tests.
+ */
 export function computeMeetupFit(entries: TasteEntry[], filters: string[]): MeetupFit {
   if (entries.length === 0 || filters.length === 0) {
     return { pct: 0, matched: [] };
@@ -39,9 +49,11 @@ export function computeMeetupFit(entries: TasteEntry[], filters: string[]): Meet
   }
 
   if (possible === 0) return { pct: 0, matched: [] };
-  // Stretch: matching half the filters at top weight should feel like a strong fit.
+  // Raw fraction of "ideal" score (every filter hit at top weight in the
+  // top-weighted lane). Honest signal: a single perfect hit scores 100,
+  // a single mediocre hit scores low, two-of-three filter hits roughly tracks.
   const raw = scored / possible;
-  const pct = Math.round(Math.min(1, raw / 0.5) * 100);
+  const pct = Math.round(Math.min(1, raw) * 100);
   return { pct, matched };
 }
 

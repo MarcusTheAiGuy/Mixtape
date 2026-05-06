@@ -57,7 +57,7 @@ If you want, follow [Conventional Commits](https://www.conventionalcommits.org/)
   - What does this change?
   - Why?
   - Anything reviewers should look at carefully?
-- CI runs `npm run typecheck` and `npm run lint`. Both have to pass before merging.
+- CI runs `npm run typecheck`, `npm run lint`, and `npm test`. All three have to pass before merging.
 - If your change touches the database schema (`prisma/schema.prisma`), call it out in the PR — it'll need `npm run db:push` after merging.
 
 ## Code style
@@ -65,7 +65,7 @@ If you want, follow [Conventional Commits](https://www.conventionalcommits.org/)
 - TypeScript strict mode is on. Don't use `any`; if you really must, leave a comment explaining why.
 - Use the path alias `@/...` instead of long relative paths.
 - Use the theme tokens (CSS variables like `--color-foreground`) so things look right in both light and dark mode.
-- See `CLAUDE.md` for the full architecture rundown — it's the source of truth for how the codebase is organised.
+- See `CLAUDE.md` for the file layout and conventions, and `docs/architecture.md` for a walking tour of the data flow.
 
 ## When you're stuck
 

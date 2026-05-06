@@ -16,24 +16,47 @@ type Props = {
 };
 
 const OUTPUT_SIZE = 512;
+// 8 MB is plenty for a phone photo before we re-encode it; anything bigger
+// suggests something's off (and we don't want the FileReader to choke).
+const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
+const ACCEPT_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/heif",
+]);
 
 export function AvatarUploader({ value, displayName, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
   function pickFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
+    e.target.value = "";
     if (!file) return;
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setError("That image is too big. Try one under 8 MB.");
+      return;
+    }
+    if (file.type && !ACCEPT_TYPES.has(file.type)) {
+      setError("Use a JPG, PNG, WebP, or HEIC image.");
+      return;
+    }
+
+    setError(null);
     const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result as string);
       setOpen(true);
     };
+    reader.onerror = () => setError("Couldn't read that file.");
     reader.readAsDataURL(file);
-    e.target.value = "";
   }
 
   function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
@@ -82,6 +105,11 @@ export function AvatarUploader({ value, displayName, onChange }: Props) {
             >
               Remove
             </button>
+          )}
+          {error && (
+            <p className="text-xs text-red-400" role="alert">
+              {error}
+            </p>
           )}
         </div>
       </div>

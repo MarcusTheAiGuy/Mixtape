@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { computeMatch, matchPercent, type MatchResult } from "@/lib/match";
-import { SAMPLE_USERS, type SampleUser } from "@/lib/sample-users";
+import type { SampleUser } from "@/lib/sample-users";
 import { STORAGE_KEYS, loadJSON } from "@/lib/local-store";
 import {
   PROFILE_STORAGE_KEY,
@@ -13,7 +13,7 @@ import {
 import { AvatarPreview } from "@/components/AvatarUploader";
 import type { TasteEntry } from "@/lib/taste";
 
-export function DiscoverList() {
+export function DiscoverList({ users }: { users: SampleUser[] }) {
   const [hydrated, setHydrated] = useState(false);
   const [own, setOwn] = useState<TasteEntry[]>([]);
   const [profile, setProfile] = useState<Profile>(DEFAULT_PROFILE);
@@ -28,14 +28,15 @@ export function DiscoverList() {
 
   const ranked = useMemo(() => {
     if (own.length === 0) {
-      return SAMPLE_USERS.map((u) => ({ user: u, match: null as MatchResult | null }));
+      return users.map((u) => ({ user: u, match: null as MatchResult | null }));
     }
-    return SAMPLE_USERS
-      // Hide a sample user that happens to share the viewer's username
+    return users
+      // Hide a user that happens to share the viewer's username (eg if you
+      // signed up under one of the sample names)
       .filter((u) => u.profile.username !== profile.username)
       .map((u) => ({ user: u, match: computeMatch(own, u.taste) }))
       .sort((a, b) => (b.match?.score ?? 0) - (a.match?.score ?? 0));
-  }, [own, profile.username]);
+  }, [own, profile.username, users]);
 
   if (!hydrated) {
     return <div className="h-32 rounded-2xl bg-[color:var(--color-card)]/30 animate-pulse" />;

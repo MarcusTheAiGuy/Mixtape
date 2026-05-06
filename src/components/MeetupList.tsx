@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { computeMeetupFit, type MeetupFit } from "@/lib/meetup-fit";
 import { STORAGE_KEYS, loadJSON } from "@/lib/local-store";
 import type { TasteEntry } from "@/lib/taste";
+import { Card } from "@/components/ui/Card";
+import { Chip } from "@/components/ui/Chip";
 
 export type MeetupItem = {
   id: string;
@@ -60,56 +62,50 @@ export function MeetupList({ items }: { items: MeetupItem[] }) {
       )}
 
       {hydrated && !hasTaste && (
-        <div className="rounded-xl border border-dashed border-[color:var(--color-border)] p-4 mb-6 text-sm text-[color:var(--color-muted)]">
-          <Link href="/me" className="underline underline-offset-2 hover:text-[color:var(--color-foreground)]">
-            Fill in your top 5s
-          </Link>{" "}
-          to see fit scores on each meetup.
-        </div>
+        <Card tone="dashed" className="mb-6 text-sm text-[color:var(--color-muted)]" padded={false}>
+          <div className="p-4">
+            <Link href="/me" className="underline underline-offset-2 hover:text-[color:var(--color-foreground)]">
+              Fill in your top 5s
+            </Link>{" "}
+            to see fit scores on each meetup.
+          </div>
+        </Card>
       )}
 
       <ul className="space-y-3">
         {sorted.map((m) => {
           const fit = fits.get(m.id);
           return (
-            <li
-              key={m.id}
-              className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/60 p-5 flex flex-wrap items-start gap-6 justify-between hover:border-[color:var(--color-accent)]/40 transition-colors"
-            >
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-baseline gap-3 mb-1">
-                  <h2 className="text-lg font-semibold">{m.title}</h2>
-                  {hydrated && hasTaste && fit && fit.pct > 0 && (
-                    <FitBadge fit={fit} />
-                  )}
-                </div>
-                <p className="text-sm text-[color:var(--color-muted)]">
-                  {m.venue} · {m.city}
-                </p>
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                  {m.tasteFilters.map((tag) => {
-                    const matched = fit?.matched.includes(tag);
-                    return (
-                      <span
+            <li key={m.id}>
+              <Card className="flex flex-wrap items-start gap-6 justify-between hover:border-[color:var(--color-accent)]/40 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-baseline gap-3 mb-1">
+                    <h2 className="text-lg font-semibold">{m.title}</h2>
+                    {hydrated && hasTaste && fit && fit.pct > 0 && (
+                      <FitBadge fit={fit} />
+                    )}
+                  </div>
+                  <p className="text-sm text-[color:var(--color-muted)]">
+                    {m.venue} · {m.city}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {m.tasteFilters.map((tag) => (
+                      <Chip
                         key={tag}
-                        className={`px-2 py-0.5 rounded-full text-xs border transition-colors ${
-                          matched
-                            ? "border-[color:var(--color-accent)]/60 bg-[color:var(--color-accent)]/15 text-[color:var(--color-foreground)]"
-                            : "border-[color:var(--color-border)] text-[color:var(--color-muted)]"
-                        }`}
+                        tone={fit?.matched.includes(tag) ? "accent" : "outline"}
                       >
                         {tag}
-                      </span>
-                    );
-                  })}
+                      </Chip>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="text-right shrink-0">
-                <p className="text-sm">{m.when}</p>
-                <p className="text-xs text-[color:var(--color-muted)] mt-1">
-                  hosted by {m.host}
-                </p>
-              </div>
+                <div className="text-right shrink-0">
+                  <p className="text-sm">{m.when}</p>
+                  <p className="text-xs text-[color:var(--color-muted)] mt-1">
+                    hosted by {m.host}
+                  </p>
+                </div>
+              </Card>
             </li>
           );
         })}

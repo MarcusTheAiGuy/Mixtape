@@ -1,10 +1,13 @@
 import { DiscoverList } from "@/components/DiscoverList";
+import { listDiscoverableUsers } from "@/lib/data/users";
 
 export const metadata = {
   title: "Discover — Mixtape",
 };
 
-export default function DiscoverPage() {
+export default async function DiscoverPage() {
+  const users = await listDiscoverableUsers();
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
       <header className="mb-10">
@@ -14,7 +17,7 @@ export default function DiscoverPage() {
           you fill in more of your top 5s.
         </p>
       </header>
-      <DiscoverList />
+      <DiscoverList users={users} />
     </div>
   );
 }

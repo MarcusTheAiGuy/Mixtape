@@ -92,10 +92,24 @@ async function searchSongs(q: string): Promise<SearchResult[]> {
   });
 }
 
+// Validate `kind` against a known set so we never forward arbitrary strings
+// to MusicBrainz as the entity name.
+const VALID_KINDS = new Set<SearchKind>(["album", "artist", "song"]);
+
+const MAX_QUERY_LEN = 80;
+// Strip ASCII control characters; rest of MB syntax we let through (it's
+// permissive about quotes and Unicode).
+const STRIPPED_RE = /[\x00-\x1F\x7F]/g;
+
+function sanitizeQuery(raw: string): string {
+  return raw.trim().replace(STRIPPED_RE, "").slice(0, MAX_QUERY_LEN);
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const q = (searchParams.get("q") ?? "").trim();
-  const kind = (searchParams.get("kind") ?? "album") as SearchKind;
+  const q = sanitizeQuery(searchParams.get("q") ?? "");
+  const kindParam = (searchParams.get("kind") ?? "album") as SearchKind;
+  const kind: SearchKind = VALID_KINDS.has(kindParam) ? kindParam : "album";
 
   if (!q || q.length < 2) {
     return NextResponse.json({ results: [] satisfies SearchResult[] });

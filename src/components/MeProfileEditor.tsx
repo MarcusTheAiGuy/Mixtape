@@ -11,6 +11,7 @@ import { ProfileTheme } from "@/components/ProfileTheme";
 import { MoodEditor } from "@/components/MoodEditor";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { ProgressNudge } from "@/components/EmptyNudge";
+import { SyncStatus } from "@/components/SyncStatus";
 import { STORAGE_KEYS, loadJSON, saveJSON } from "@/lib/local-store";
 import {
   DEFAULT_PROFILE,
@@ -67,10 +68,14 @@ export function MeProfileEditor() {
 
   return (
     <>
-      <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 mb-8 text-sm">
-        <strong className="font-semibold">Local preview.</strong> Profile, top
-        5s, and avatar all save in this browser only for now. They&apos;ll move
-        to your account once auth + database are connected.
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-8">
+        <SyncStatus />
+        <Link
+          href="/me/diary"
+          className="text-sm text-[color:var(--color-muted)] hover:text-[color:var(--color-foreground)]"
+        >
+          Mood diary →
+        </Link>
       </div>
 
       <ProfileHeader mode="edit" profile={profile} onChange={setProfile} />

@@ -1,10 +1,14 @@
-// Tiny localStorage helpers used while auth + DB aren't connected yet.
-// Once `npm run db:push` is done and NextAuth is wired to a session,
-// swap callers to server actions backed by Prisma.
+/**
+ * Tiny localStorage helpers used in **demo mode** (no auth + no DB) — and as
+ * a sensible fallback for unauthenticated visitors once the real backend is
+ * connected. See `docs/architecture.md` for the dual-path persistence model
+ * and `src/app/_actions/*` for the server-side equivalents.
+ */
 
 import type { TasteEntry } from "@/lib/taste";
 import type { WishlistShow } from "@/lib/wishlist";
 
+/** Stable localStorage keys. Bump these to invalidate old client data. */
 export const STORAGE_KEYS = {
   identity: "mixtape:taste:identity",
   mood: (monthKey: string) => `mixtape:taste:mood:${monthKey}`,

@@ -4,7 +4,7 @@ import { TasteShowcase } from "@/components/TasteShowcase";
 import { TasteInsights } from "@/components/TasteInsights";
 import { MatchInCommon } from "@/components/MatchInCommon";
 import { ProfileTheme } from "@/components/ProfileTheme";
-import { SAMPLE_USERS_BY_USERNAME } from "@/lib/sample-users";
+import { getUserByUsername } from "@/lib/data/users";
 
 export const metadata = {
   title: "Profile — Mixtape",
@@ -16,22 +16,21 @@ export default async function ProfilePage({
   params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
-  const sample = SAMPLE_USERS_BY_USERNAME[username.toLowerCase()];
-  if (!sample) notFound();
+  const user = await getUserByUsername(username);
+  if (!user) notFound();
 
   return (
-    <ProfileTheme accentHex={sample.profile.accentHex}>
+    <ProfileTheme accentHex={user.profile.accentHex}>
       <div className="max-w-4xl mx-auto px-6 py-12">
-        <ProfileHeader mode="read" profile={sample.profile} />
-        {/* Client island — reads viewer's taste from localStorage and shows overlap */}
+        <ProfileHeader mode="read" profile={user.profile} />
         <MatchInCommon
-          targetUsername={sample.profile.username}
-          targetTaste={sample.taste}
+          targetUsername={user.profile.username}
+          targetTaste={user.taste}
         />
         <div className="mb-12">
-          <TasteInsights entries={sample.taste} />
+          <TasteInsights entries={user.taste} />
         </div>
-        <TasteShowcase entries={sample.taste} />
+        <TasteShowcase entries={user.taste} />
       </div>
     </ProfileTheme>
   );

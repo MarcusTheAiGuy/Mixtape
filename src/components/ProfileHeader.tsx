@@ -1,7 +1,14 @@
 "use client";
 
 import { AvatarPreview, AvatarUploader } from "@/components/AvatarUploader";
-import { ACCENT_PRESETS, type Profile } from "@/lib/profile";
+import { Card } from "@/components/ui/Card";
+import { Field, TextArea, TextInput } from "@/components/ui/Field";
+import {
+  ACCENT_PRESETS,
+  PROFILE_LIMITS,
+  sanitizeUsername,
+  type Profile,
+} from "@/lib/profile";
 
 type EditableProps = {
   mode: "edit";
@@ -53,7 +60,7 @@ function EditableHeader({
   }
 
   return (
-    <section className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/40 p-6 mb-8">
+    <Card tone="soft" padded={false} className="p-6 mb-8">
       <div className="grid gap-6 md:grid-cols-[auto_1fr]">
         <AvatarUploader
           value={profile.avatarDataUrl}
@@ -63,12 +70,14 @@ function EditableHeader({
 
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label="Display name">
-            <input
+            <TextInput
               type="text"
               value={profile.displayName}
-              onChange={(e) => update("displayName", e.target.value)}
+              onChange={(e) =>
+                update("displayName", e.target.value.slice(0, PROFILE_LIMITS.displayName))
+              }
               placeholder="Your name"
-              className="w-full px-3 py-2 rounded-lg bg-[color:var(--color-background)] border border-[color:var(--color-border)] focus:outline-none focus:border-pink-400/60 placeholder:text-[color:var(--color-muted)]"
+              maxLength={PROFILE_LIMITS.displayName}
             />
           </Field>
           <Field label="Username">
@@ -76,43 +85,39 @@ function EditableHeader({
               <span className="px-3 py-2 rounded-l-lg bg-[color:var(--color-background)] border border-r-0 border-[color:var(--color-border)] text-[color:var(--color-muted)]">
                 @
               </span>
-              <input
+              <TextInput
                 type="text"
                 value={profile.username}
-                onChange={(e) =>
-                  update(
-                    "username",
-                    e.target.value
-                      .toLowerCase()
-                      .replace(/[^a-z0-9_]/g, "")
-                      .slice(0, 20),
-                  )
-                }
+                onChange={(e) => update("username", sanitizeUsername(e.target.value))}
                 placeholder="username"
-                className="flex-1 min-w-0 px-3 py-2 rounded-r-lg bg-[color:var(--color-background)] border border-[color:var(--color-border)] focus:outline-none focus:border-pink-400/60 placeholder:text-[color:var(--color-muted)]"
+                maxLength={PROFILE_LIMITS.username}
+                className="rounded-l-none"
               />
             </div>
           </Field>
           <Field label="Location" wide>
-            <input
+            <TextInput
               type="text"
               value={profile.location}
-              onChange={(e) => update("location", e.target.value)}
+              onChange={(e) =>
+                update("location", e.target.value.slice(0, PROFILE_LIMITS.location))
+              }
               placeholder="Where you're based"
-              className="w-full px-3 py-2 rounded-lg bg-[color:var(--color-background)] border border-[color:var(--color-border)] focus:outline-none focus:border-pink-400/60 placeholder:text-[color:var(--color-muted)]"
+              maxLength={PROFILE_LIMITS.location}
             />
           </Field>
-          <Field label="Bio" wide>
-            <textarea
+          <Field
+            label="Bio"
+            wide
+            hint={`${PROFILE_LIMITS.bio - profile.bio.length} characters left`}
+          >
+            <TextArea
               value={profile.bio}
-              onChange={(e) => update("bio", e.target.value.slice(0, 240))}
+              onChange={(e) => update("bio", e.target.value.slice(0, PROFILE_LIMITS.bio))}
               placeholder="A few words on what you're into."
               rows={2}
-              className="w-full px-3 py-2 rounded-lg bg-[color:var(--color-background)] border border-[color:var(--color-border)] focus:outline-none focus:border-pink-400/60 placeholder:text-[color:var(--color-muted)] resize-none"
+              maxLength={PROFILE_LIMITS.bio}
             />
-            <p className="text-xs text-[color:var(--color-muted)] mt-1">
-              {240 - profile.bio.length} characters left
-            </p>
           </Field>
           <Field label="Accent" wide>
             <div className="flex flex-wrap items-center gap-2">
@@ -153,25 +158,6 @@ function EditableHeader({
           </Field>
         </div>
       </div>
-    </section>
-  );
-}
-
-function Field({
-  label,
-  children,
-  wide,
-}: {
-  label: string;
-  children: React.ReactNode;
-  wide?: boolean;
-}) {
-  return (
-    <label className={`block ${wide ? "sm:col-span-2" : ""}`}>
-      <span className="text-xs uppercase tracking-wider text-[color:var(--color-muted)] mb-1.5 block">
-        {label}
-      </span>
-      {children}
-    </label>
+    </Card>
   );
 }
