@@ -1,10 +1,15 @@
 import "server-only";
 
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { hasDb } from "@/lib/has-db";
 import { SAMPLE_USERS, SAMPLE_USERS_BY_USERNAME, type SampleUser } from "@/lib/sample-users";
 import type { Profile } from "@/lib/profile";
 import type { TasteEntry } from "@/lib/taste";
+
+function isMissingTableError(err: unknown): boolean {
+  return err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2021";
+}
 
 /**
  * Server-side reads with a clean fallback to sample data when the DB isn't
@@ -56,29 +61,36 @@ export async function getUserByUsername(
   if (!hasDb()) {
     return SAMPLE_USERS_BY_USERNAME[username.toLowerCase()] ?? null;
   }
-  const u = await prisma.user.findFirst({
-    where: { username: { equals: username, mode: "insensitive" } },
-    select: {
-      id: true,
-      name: true,
-      username: true,
-      bio: true,
-      location: true,
-      image: true,
-      taste: {
-        select: {
-          category: true,
-          position: true,
-          name: true,
-          subtitle: true,
-          imageUrl: true,
-          externalId: true,
+  try {
+    const u = await prisma.user.findFirst({
+      where: { username: { equals: username, mode: "insensitive" } },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        bio: true,
+        location: true,
+        image: true,
+        taste: {
+          select: {
+            category: true,
+            position: true,
+            name: true,
+            subtitle: true,
+            imageUrl: true,
+            externalId: true,
+          },
         },
       },
-    },
-  });
-  if (!u) return null;
-  return toSampleShape(u as DbUser);
+    });
+    if (!u) return null;
+    return toSampleShape(u as DbUser);
+  } catch (err) {
+    if (isMissingTableError(err)) {
+      return SAMPLE_USERS_BY_USERNAME[username.toLowerCase()] ?? null;
+    }
+    throw err;
+  }
 }
 
 /** All users with a username, for /discover. Falls back to SAMPLE_USERS. */
@@ -88,31 +100,36 @@ export async function listDiscoverableUsers(
   if (!hasDb()) {
     return SAMPLE_USERS;
   }
-  const users = await prisma.user.findMany({
-    where: {
-      username: { not: null },
-      ...(excludeUserId ? { NOT: { id: excludeUserId } } : {}),
-    },
-    select: {
-      id: true,
-      name: true,
-      username: true,
-      bio: true,
-      location: true,
-      image: true,
-      taste: {
-        select: {
-          category: true,
-          position: true,
-          name: true,
-          subtitle: true,
-          imageUrl: true,
-          externalId: true,
+  try {
+    const users = await prisma.user.findMany({
+      where: {
+        username: { not: null },
+        ...(excludeUserId ? { NOT: { id: excludeUserId } } : {}),
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        bio: true,
+        location: true,
+        image: true,
+        taste: {
+          select: {
+            category: true,
+            position: true,
+            name: true,
+            subtitle: true,
+            imageUrl: true,
+            externalId: true,
+          },
         },
       },
-    },
-    take: 100,
-  });
-  if (users.length === 0) return SAMPLE_USERS;
-  return (users as DbUser[]).map(toSampleShape);
+      take: 100,
+    });
+    if (users.length === 0) return SAMPLE_USERS;
+    return (users as DbUser[]).map(toSampleShape);
+  } catch (err) {
+    if (isMissingTableError(err)) return SAMPLE_USERS;
+    throw err;
+  }
 }
