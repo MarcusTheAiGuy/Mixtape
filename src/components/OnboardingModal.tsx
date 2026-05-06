@@ -7,7 +7,7 @@ const ONBOARDING_KEY = "mixtape:onboarded";
 
 const STEPS = [
   {
-    title: "Hi. Welcome to Mixtape.",
+    title: "Hi. Welcome to Edinburgh Foyer.",
     body:
       "Drop your favourite albums, artists, genres, songs, and the gigs that stuck with you. Half-filled is fine.",
   },

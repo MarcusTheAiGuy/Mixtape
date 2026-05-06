@@ -2,7 +2,7 @@ import Link from "next/link";
 import { NewMeetupForm } from "@/components/NewMeetupForm";
 
 export const metadata = {
-  title: "Host a meetup — Mixtape",
+  title: "Host a meetup — Edinburgh Foyer",
 };
 
 export default function NewMeetupPage() {

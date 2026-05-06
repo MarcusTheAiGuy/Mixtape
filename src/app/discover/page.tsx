@@ -2,7 +2,7 @@ import { DiscoverList } from "@/components/DiscoverList";
 import { listDiscoverableUsers } from "@/lib/data/users";
 
 export const metadata = {
-  title: "Discover — Mixtape",
+  title: "Discover — Edinburgh Foyer",
 };
 
 export default async function DiscoverPage() {

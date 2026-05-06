@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { id } = await params;
   const meetup = getSampleMeetup(id);
   return {
-    title: meetup ? `${meetup.title} — Mixtape` : "Meetup — Mixtape",
+    title: meetup ? `${meetup.title} — Edinburgh Foyer` : "Meetup — Edinburgh Foyer",
   };
 }
 

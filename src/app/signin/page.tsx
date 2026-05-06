@@ -1,4 +1,4 @@
-export const metadata = { title: "Sign in — Mixtape" };
+export const metadata = { title: "Sign in — Edinburgh Foyer" };
 
 export default function SignInPage() {
   const googleConfigured = Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET);

@@ -7,7 +7,7 @@ import { ProfileTheme } from "@/components/ProfileTheme";
 import { getUserByUsername } from "@/lib/data/users";
 
 export const metadata = {
-  title: "Profile — Mixtape",
+  title: "Profile — Edinburgh Foyer",
 };
 
 export default async function ProfilePage({

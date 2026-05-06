@@ -3,7 +3,7 @@ import { MeetupList } from "@/components/MeetupList";
 import { SAMPLE_MEETUPS } from "@/lib/meetups";
 
 export const metadata = {
-  title: "Meetups — Mixtape",
+  title: "Meetups — Edinburgh Foyer",
 };
 
 export default function MeetupsPage() {
