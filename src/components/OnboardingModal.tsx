@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 
 const ONBOARDING_KEY = "mixtape:onboarded";
 
@@ -52,6 +53,8 @@ export function OnboardingModal() {
     else setStep(step + 1);
   }
 
+  const dialogRef = useModalA11y(open, dismiss);
+
   if (!open) return null;
   const current = STEPS[step];
 
@@ -61,8 +64,11 @@ export function OnboardingModal() {
       onClick={dismiss}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
+        aria-labelledby="onboarding-title"
+        tabIndex={-1}
         className="relative bg-[color:var(--color-card)] border border-[color:var(--color-border)] rounded-2xl p-7 max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
@@ -79,7 +85,7 @@ export function OnboardingModal() {
           ))}
         </div>
 
-        <h2 className="text-2xl font-semibold tracking-tight mb-3">
+        <h2 id="onboarding-title" className="text-2xl font-semibold tracking-tight mb-3">
           {current.title}
         </h2>
         <p className="text-[color:var(--color-muted)] leading-relaxed">{current.body}</p>

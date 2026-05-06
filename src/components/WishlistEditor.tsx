@@ -1,10 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TasteTypeahead } from "@/components/TasteTypeahead";
 import type { SearchResult } from "@/lib/music-search";
 import { type WishlistShow, newWishlistId } from "@/lib/wishlist";
 import { STORAGE_KEYS, loadJSON, saveJSON } from "@/lib/local-store";
+import { findMeetupsForWishlistShow } from "@/lib/wishlist-meetup-link";
+import { SAMPLE_MEETUPS } from "@/lib/meetups";
 
 const blank = (): WishlistShow => ({
   id: newWishlistId(),
@@ -111,29 +114,57 @@ export function WishlistEditor() {
         </p>
       ) : (
         <ul className="space-y-3">
-          {items.map((it) => (
-            <li
-              key={it.id}
-              className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/40 p-5 flex items-start gap-4"
-            >
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-lg">{it.artist}</p>
-                <p className="text-sm text-[color:var(--color-muted)] mt-1">
-                  {[it.venue, it.city].filter(Boolean).join(" · ") || "Venue TBD"}
-                  {it.date ? ` · ${formatDate(it.date)}` : ""}
-                </p>
-                {it.notes && <p className="text-sm mt-2">{it.notes}</p>}
-              </div>
-              <button
-                type="button"
-                onClick={() => remove(it.id)}
-                aria-label="Remove from wishlist"
-                className="text-[color:var(--color-muted)] hover:text-[color:var(--color-foreground)] text-xl leading-none"
+          {items.map((it) => {
+            const matches = findMeetupsForWishlistShow(it, SAMPLE_MEETUPS);
+            return (
+              <li
+                key={it.id}
+                className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/40 p-5"
               >
-                ×
-              </button>
-            </li>
-          ))}
+                <div className="flex items-start gap-4">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-lg">{it.artist}</p>
+                    <p className="text-sm text-[color:var(--color-muted)] mt-1">
+                      {[it.venue, it.city].filter(Boolean).join(" · ") || "Venue TBD"}
+                      {it.date ? ` · ${formatDate(it.date)}` : ""}
+                    </p>
+                    {it.notes && <p className="text-sm mt-2">{it.notes}</p>}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => remove(it.id)}
+                    aria-label="Remove from wishlist"
+                    className="text-[color:var(--color-muted)] hover:text-[color:var(--color-foreground)] text-xl leading-none"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {matches.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-[color:var(--color-border)]">
+                    <p className="text-xs uppercase tracking-wider text-[color:var(--color-muted)] mb-2">
+                      Matching meetup{matches.length === 1 ? "" : "s"}
+                    </p>
+                    <ul className="space-y-1.5">
+                      {matches.map((m) => (
+                        <li key={m.id}>
+                          <Link
+                            href={`/meetups/${m.id}`}
+                            className="text-sm underline underline-offset-2 hover:text-[color:var(--color-foreground)]"
+                          >
+                            {m.title}
+                          </Link>{" "}
+                          <span className="text-xs text-[color:var(--color-muted)]">
+                            · {m.venue}, {m.city} · {m.when}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </>

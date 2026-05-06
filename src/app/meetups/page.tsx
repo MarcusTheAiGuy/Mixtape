@@ -1,39 +1,10 @@
 import Link from "next/link";
-import { MeetupList, type MeetupItem } from "@/components/MeetupList";
+import { MeetupList } from "@/components/MeetupList";
+import { SAMPLE_MEETUPS } from "@/lib/meetups";
 
 export const metadata = {
   title: "Meetups — Mixtape",
 };
-
-const sampleMeetups: MeetupItem[] = [
-  {
-    id: "1",
-    title: "Listening party: new album drop",
-    venue: "The Lock Tavern",
-    city: "London",
-    when: "Fri, May 9 · 8pm",
-    host: "marcus",
-    tasteFilters: ["shoegaze", "dream pop", "Slowdive"],
-  },
-  {
-    id: "2",
-    title: "Vinyl swap & coffee",
-    venue: "Climpson & Sons",
-    city: "London",
-    when: "Sun, May 11 · 11am",
-    host: "friend",
-    tasteFilters: ["soul", "jazz", "Erykah Badu"],
-  },
-  {
-    id: "3",
-    title: "Looking for a +1 to Big Thief",
-    venue: "Roundhouse",
-    city: "London",
-    when: "Sat, May 24 · 7pm",
-    host: "marcus",
-    tasteFilters: ["Big Thief", "indie folk"],
-  },
-];
 
 export default function MeetupsPage() {
   return (
@@ -54,7 +25,7 @@ export default function MeetupsPage() {
         </Link>
       </div>
 
-      <MeetupList items={sampleMeetups} />
+      <MeetupList items={SAMPLE_MEETUPS} />
     </div>
   );
 }

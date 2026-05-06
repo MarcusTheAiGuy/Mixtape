@@ -5,18 +5,11 @@ import { useEffect, useMemo, useState } from "react";
 import { computeMeetupFit, type MeetupFit } from "@/lib/meetup-fit";
 import { STORAGE_KEYS, loadJSON } from "@/lib/local-store";
 import type { TasteEntry } from "@/lib/taste";
+import type { MeetupItem } from "@/lib/meetups";
 import { Card } from "@/components/ui/Card";
 import { Chip } from "@/components/ui/Chip";
 
-export type MeetupItem = {
-  id: string;
-  title: string;
-  venue: string;
-  city: string;
-  when: string;
-  host: string;
-  tasteFilters: string[];
-};
+export type { MeetupItem };
 
 type SortMode = "fit" | "chrono";
 
@@ -77,35 +70,40 @@ export function MeetupList({ items }: { items: MeetupItem[] }) {
           const fit = fits.get(m.id);
           return (
             <li key={m.id}>
-              <Card className="flex flex-wrap items-start gap-6 justify-between hover:border-[color:var(--color-accent)]/40 transition-colors">
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-baseline gap-3 mb-1">
-                    <h2 className="text-lg font-semibold">{m.title}</h2>
-                    {hydrated && hasTaste && fit && fit.pct > 0 && (
-                      <FitBadge fit={fit} />
-                    )}
+              <Link
+                href={`/meetups/${m.id}`}
+                className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-accent)] rounded-2xl"
+              >
+                <Card className="flex flex-wrap items-start gap-6 justify-between hover:border-[color:var(--color-accent)]/40 transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-baseline gap-3 mb-1">
+                      <h2 className="text-lg font-semibold">{m.title}</h2>
+                      {hydrated && hasTaste && fit && fit.pct > 0 && (
+                        <FitBadge fit={fit} />
+                      )}
+                    </div>
+                    <p className="text-sm text-[color:var(--color-muted)]">
+                      {m.venue} · {m.city}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {m.tasteFilters.map((tag) => (
+                        <Chip
+                          key={tag}
+                          tone={fit?.matched.includes(tag) ? "accent" : "outline"}
+                        >
+                          {tag}
+                        </Chip>
+                      ))}
+                    </div>
                   </div>
-                  <p className="text-sm text-[color:var(--color-muted)]">
-                    {m.venue} · {m.city}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mt-3">
-                    {m.tasteFilters.map((tag) => (
-                      <Chip
-                        key={tag}
-                        tone={fit?.matched.includes(tag) ? "accent" : "outline"}
-                      >
-                        {tag}
-                      </Chip>
-                    ))}
+                  <div className="text-right shrink-0">
+                    <p className="text-sm">{m.when}</p>
+                    <p className="text-xs text-[color:var(--color-muted)] mt-1">
+                      hosted by {m.host}
+                    </p>
                   </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-sm">{m.when}</p>
-                  <p className="text-xs text-[color:var(--color-muted)] mt-1">
-                    hosted by {m.host}
-                  </p>
-                </div>
-              </Card>
+                </Card>
+              </Link>
             </li>
           );
         })}

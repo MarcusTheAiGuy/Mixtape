@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { useModalA11y } from "@/lib/use-modal-a11y";
 import ReactCrop, {
   centerCrop,
   makeAspectCrop,
@@ -8,6 +9,7 @@ import ReactCrop, {
   type PixelCrop,
 } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+import { gradientCss } from "@/lib/avatar-gradient";
 
 type Props = {
   value: string | null;
@@ -83,6 +85,12 @@ export function AvatarUploader({ value, displayName, onChange }: Props) {
     setImageSrc(null);
   }
 
+  const closeModal = useCallback(() => {
+    setOpen(false);
+    setImageSrc(null);
+  }, []);
+  const dialogRef = useModalA11y(open, closeModal);
+
   return (
     <>
       <div className="flex items-center gap-4">
@@ -117,13 +125,18 @@ export function AvatarUploader({ value, displayName, onChange }: Props) {
       {open && imageSrc && (
         <div
           className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setOpen(false)}
+          onClick={closeModal}
         >
           <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="avatar-crop-title"
+            tabIndex={-1}
             className="bg-[color:var(--color-card)] border border-[color:var(--color-border)] rounded-2xl p-6 max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-semibold mb-1">Crop your photo</h3>
+            <h3 id="avatar-crop-title" className="text-lg font-semibold mb-1">Crop your photo</h3>
             <p className="text-sm text-[color:var(--color-muted)] mb-4">
               Drag to reposition. The circle is what people will see.
             </p>
@@ -184,8 +197,13 @@ export function AvatarPreview({
   if (!value) {
     return (
       <div
-        className="rounded-full bg-gradient-to-br from-pink-400/60 to-indigo-400/60 flex items-center justify-center font-semibold"
-        style={{ width: size, height: size, fontSize: size * 0.4 }}
+        className="rounded-full flex items-center justify-center font-semibold text-white"
+        style={{
+          width: size,
+          height: size,
+          fontSize: size * 0.4,
+          background: gradientCss(displayName),
+        }}
         aria-hidden
       >
         {initial}
