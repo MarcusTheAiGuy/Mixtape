@@ -31,14 +31,14 @@ export default function HomePage() {
           <Link
             key={f.title}
             href={f.href}
-            className="group relative overflow-hidden rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/60 p-6 hover:border-pink-400/50 transition-colors"
+            className="group relative overflow-hidden rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/70 p-6 hover:border-[#6b9e6e]/60 transition-colors"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-400/0 via-transparent to-indigo-400/0 group-hover:from-pink-400/10 group-hover:to-indigo-400/10 transition-colors" />
-            <h3 className="relative text-xl font-semibold mb-2">{f.title}</h3>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#6b9e6e]/0 via-transparent to-[#c4703a]/0 group-hover:from-[#6b9e6e]/8 group-hover:to-[#c4703a]/8 transition-colors" />
+            <h3 className="relative text-xl font-normal mb-2">{f.title}</h3>
             <p className="relative text-[color:var(--color-muted)] leading-relaxed mb-6">
               {f.body}
             </p>
-            <span className="relative inline-flex items-center text-sm text-pink-400 group-hover:text-pink-300">
+            <span className="relative inline-flex items-center text-sm text-[#6b9e6e] group-hover:text-[#c4703a] transition-colors">
               {f.cta}
               <span className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
             </span>

@@ -10,10 +10,10 @@ export function Hero() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="text-5xl md:text-7xl tracking-tight font-semibold leading-[1.05] max-w-3xl"
+        className="text-5xl md:text-7xl tracking-tight font-normal leading-[1.08] max-w-3xl"
       >
         Share your taste.{" "}
-        <span className="bg-gradient-to-r from-pink-300 via-fuchsia-300 to-indigo-300 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-[#6b9e6e] via-[#a8c97a] to-[#c4703a] bg-clip-text text-transparent">
           Find your people.
         </span>
       </motion.h1>
@@ -43,7 +43,7 @@ export function Hero() {
         </Link>
         <Link
           href="/meetups"
-          className="px-5 py-3 rounded-full border border-[color:var(--color-border)] hover:bg-white/5 transition-colors"
+          className="px-5 py-3 rounded-full border border-[color:var(--color-border)] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
         >
           Browse meetups
         </Link>
