@@ -20,7 +20,8 @@
     "next": "16.1.6",
     "next-auth": "5.0.0-beta.25",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "react-image-crop": "^11.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",

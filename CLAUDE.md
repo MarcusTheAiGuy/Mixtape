@@ -34,8 +34,8 @@ src/
     layout.tsx            # root layout: nav, footer, theme init script, analytics
     page.tsx              # landing page
     globals.css           # Tailwind v4 + theme tokens (light/dark)
-    me/page.tsx           # taste editor (top 5s, identity layer)
-    u/[username]/page.tsx # public profile
+    me/page.tsx           # full profile editor — avatar (cropped), bio, top 5s, insights, public preview
+    u/[username]/page.tsx # public read-only profile (header + insights + showcase)
     wishlist/page.tsx     # user's wishlisted upcoming shows
     meetups/page.tsx      # browse meetups
     signin/page.tsx       # auth entry
@@ -47,16 +47,22 @@ src/
   components/
     Navbar.tsx, Footer.tsx, Hero.tsx
     ThemeToggle.tsx       # light/dark toggle + pre-hydration init script
+    AvatarUploader.tsx    # file picker + circle-crop (react-image-crop) -> data URL
+    ProfileHeader.tsx     # editable + read-only header (avatar, name, bio, location)
     TasteTypeahead.tsx    # generic MB-backed search dropdown w/ thumbnails
     TopFiveCategory.tsx   # 5-slot input grid for one category
-    TasteEditor.tsx       # composes all 5 categories on /me
+    TasteShowcase.tsx     # server-renderable visual layout of top 5s (grids, tier, list)
+    TasteInsights.tsx     # completeness ring, vibe blurb, recurring-name crossovers
+    MeProfileEditor.tsx   # client editor that composes everything for /me
     WishlistEditor.tsx    # form + list for /wishlist
   lib/
     prisma.ts             # singleton Prisma client
     music-search.ts       # client + types for /api/music/search
     taste.ts              # TasteEntry types, category metadata
     wishlist.ts           # WishlistShow types
+    profile.ts            # Profile type + storage key
     genres.ts             # curated genre list (used by GenreSelect)
+    insights.ts           # pure functions to derive insights from entries
     local-store.ts        # localStorage shim — replace with server actions later
 prisma/
   schema.prisma           # User/Account/Session + TasteEntry/MoodEntry/WishlistShow/Meetup/Attendee
