@@ -31,14 +31,14 @@ export default function HomePage() {
           <Link
             key={f.title}
             href={f.href}
-            className="group relative overflow-hidden rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/70 p-6 hover:border-[#d4a827]/60 transition-colors"
+            className="group relative overflow-hidden border border-[color:var(--color-border)] bg-[color:var(--color-card)]/70 p-8 hover:border-[#c23b2a]/60 transition-colors"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-[#c23b2a]/0 via-transparent to-[#d4a827]/0 group-hover:from-[#c23b2a]/8 group-hover:to-[#d4a827]/8 transition-colors" />
-            <h3 className="relative text-xl font-normal mb-2">{f.title}</h3>
+            <h3 className="relative text-xl font-bold uppercase tracking-wide mb-3">{f.title}</h3>
             <p className="relative text-[color:var(--color-muted)] leading-relaxed mb-6">
               {f.body}
             </p>
-            <span className="relative inline-flex items-center text-sm text-[#d4a827] group-hover:text-[#c23b2a] transition-colors">
+            <span className="relative inline-flex items-center text-xs font-bold uppercase tracking-widest text-[#c23b2a] group-hover:text-[#d4a827] transition-colors">
               {f.cta}
               <span className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
             </span>
